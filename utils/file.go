@@ -14,6 +14,7 @@ const defaultFolderPerm os.FileMode = 0777
 
 // SaveToDisk saves the image to the disk with the given file path and file name and returns the saved file path and an error if any.
 func SaveToDisk(image []byte, fileName, filePath string) (string, error) {
+	// TODO : handle concurrency because os file operations are not thread safe.
 	exist, err := exists(filePath)
 	if err != nil {
 		return "", fmt.Errorf("file path error : %v", err)

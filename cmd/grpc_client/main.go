@@ -18,7 +18,6 @@ import (
 )
 
 func main() {
-
 	help := flag.Bool("help", false, "flag to show help")
 	flag.Parse()
 
@@ -64,7 +63,6 @@ func main() {
 // If save flag is provided, it prints the full path of the image.
 // If save flag is not provided, it prints the image URL only.
 func searchCommand(ctx context.Context, c breed_image.BreedImageServiceClient, args []string) {
-
 	searchCmd := flag.NewFlagSet("search", flag.ExitOnError)
 	breed := searchCmd.String("breed", "", "Enter a breed name to search")
 	subBreed := searchCmd.String("sub-breed", "", "Enter a sub-breed name to search")

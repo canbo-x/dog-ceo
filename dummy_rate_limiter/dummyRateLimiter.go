@@ -19,9 +19,7 @@ type LimitCounter struct {
 
 // NewLimitCounter returns a new LimitCounter instance with count 0.
 func NewLimitCounter() *LimitCounter {
-	return &LimitCounter{
-		count: 0,
-	}
+	return &LimitCounter{}
 }
 
 // Limit returns true if the limit is reached.

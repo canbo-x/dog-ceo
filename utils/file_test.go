@@ -6,7 +6,6 @@ import (
 )
 
 func TestSaveToDisk(t *testing.T) {
-
 	tests := map[string]struct {
 		FileName         string
 		FilePath         string

@@ -50,13 +50,12 @@ func createEndpoint(breed, subBreed string) string {
 	if len(subBreed) > 0 {
 		return fmt.Sprintf("https://dog.ceo/api/breed/%s/%s/images/random", breed, subBreed)
 	}
-	return "https://dog.ceo/api/breed/" + breed + "/images/random"
+	return fmt.Sprintf("https://dog.ceo/api/breed/%s/images/random", breed)
 }
 
 // getRandomImageURL returns the image URL as a string, status code as an integer and an error if any.
 // It uses the given endpoint to get the image URL.
 func getRandomImageURL(ctx context.Context, client *http.Client, endpoint string) (string, int, error) {
-
 	resp, statusCode, err := processHttpGet(ctx, client, endpoint)
 	if err != nil {
 		return "", statusCode, err
@@ -66,9 +65,8 @@ func getRandomImageURL(ctx context.Context, client *http.Client, endpoint string
 		return "", statusCode, nil
 	}
 
-	apiResp := new(getRandomImageAPIResponse)
-	err = json.Unmarshal(resp, apiResp)
-	if err != nil {
+	apiResp := &getRandomImageAPIResponse{}
+	if err := json.Unmarshal(resp, apiResp); err != nil {
 		return "", statusCode, err
 	}
 

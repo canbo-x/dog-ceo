@@ -67,7 +67,6 @@ func getClient(conn *grpc.ClientConn) breed_image.BreedImageServiceClient {
 	return breed_image.NewBreedImageServiceClient(conn)
 }
 func TestServerAndSearch(t *testing.T) {
-
 	tests := map[string]struct {
 		Breed    string
 		SubBreed string
@@ -175,7 +174,6 @@ func TestServerAndSearch(t *testing.T) {
 }
 
 func TestRateLimiting(t *testing.T) {
-
 	ctx, conn := getCoon(true)
 	defer conn.Close()
 	client := getClient(conn)

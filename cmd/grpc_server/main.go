@@ -30,38 +30,7 @@ type breedImageServer struct {
 	breed_image.UnimplementedBreedImageServiceServer
 }
 
-// Search checks for the image of the given breed and sub-breed.
-func (bis *breedImageServer) Search(ctx context.Context, bi *breed_image.BreedImageSearchRequest) (*breed_image.BreedImageSearchResponse, error) {
-	log.Printf("Received a request to search. Breed : %v Sub Breed : %v\n", bi.Breed, bi.SubBreed)
-
-	if !isValidString(bi.Breed) {
-		log.Println("Invalid breed name. Request is rejected.")
-		return nil, fmt.Errorf("invalid breed name it can only contains english latin letters : %v", bi.Breed)
-	}
-
-	if bi.SubBreed != "" && !isValidString(bi.SubBreed) {
-		log.Println("Invalid sub-breed name. Request is rejected.")
-		return nil, fmt.Errorf("invalid sub-breed name it can only contains english latin letters : %v", bi.SubBreed)
-	}
-
-	imageURL, err := breed_image_service.GetURL(ctx, data_service.NewHttpClient(), bi.Breed, bi.SubBreed)
-	if err != nil {
-		log.Printf("Error while getting image url : %v\n", err)
-		return nil, err
-	}
-
-	image, err := breed_image_service.GetImage(ctx, data_service.NewHttpClient(), imageURL)
-	if err != nil {
-		log.Printf("Error while getting image : %v\n", err)
-		return nil, fmt.Errorf("failed to get image : %v", err)
-	}
-
-	log.Printf("Image is fetched and served to the client. Image URL : %v\n", imageURL)
-	return &breed_image.BreedImageSearchResponse{ImageURL: imageURL, Image: image}, nil
-}
-
 func main() {
-
 	// This port is used to serve the breed image service.
 	port := flag.Int("port", 22626, "The gRPC-server port.")
 
@@ -128,6 +97,36 @@ func main() {
 	case <-stopChan:
 		logrusLogger.Info("Stopping the server...")
 	}
+}
+
+// Search checks for the image of the given breed and sub-breed.
+func (bis *breedImageServer) Search(ctx context.Context, bi *breed_image.BreedImageSearchRequest) (*breed_image.BreedImageSearchResponse, error) {
+	log.Printf("Received a request to search. Breed : %v Sub Breed : %v\n", bi.Breed, bi.SubBreed)
+
+	if !isValidString(bi.Breed) {
+		log.Println("Invalid breed name. Request is rejected.")
+		return nil, fmt.Errorf("invalid breed name it can only contains english latin letters : %v", bi.Breed)
+	}
+
+	if bi.SubBreed != "" && !isValidString(bi.SubBreed) {
+		log.Println("Invalid sub-breed name. Request is rejected.")
+		return nil, fmt.Errorf("invalid sub-breed name it can only contains english latin letters : %v", bi.SubBreed)
+	}
+
+	imageURL, err := breed_image_service.GetURL(ctx, data_service.NewHttpClient(), bi.Breed, bi.SubBreed)
+	if err != nil {
+		log.Printf("Error while getting image url : %v\n", err)
+		return nil, err
+	}
+
+	image, err := breed_image_service.GetImage(ctx, data_service.NewHttpClient(), imageURL)
+	if err != nil {
+		log.Printf("Error while getting image : %v\n", err)
+		return nil, fmt.Errorf("failed to get image : %v", err)
+	}
+
+	log.Printf("Image is fetched and served to the client. Image URL : %v\n", imageURL)
+	return &breed_image.BreedImageSearchResponse{ImageURL: imageURL, Image: image}, nil
 }
 
 // checkAndSetLogLevel checks the log level and sets it.
