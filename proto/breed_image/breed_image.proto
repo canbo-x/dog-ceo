@@ -1,0 +1,21 @@
+syntax = "proto3";
+package breed_image;
+
+option go_package = "github.com/canbo-x/dog-ceo/proto;breed_image";
+
+// The breed image service definition.
+service BreedImageService {
+  
+  rpc Search(BreedImageSearchRequest) returns (BreedImageSearchResponse) {}
+    
+  }
+
+  message BreedImageSearchRequest {
+    string breed = 1;
+    string subBreed = 2;
+  }
+
+  message BreedImageSearchResponse {
+    string imageURL = 1;
+    bytes image = 2;
+  }
